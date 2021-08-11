@@ -11,7 +11,7 @@ const PlaceDetails = ({place}) => {
   // Destructuring classes
   const {chip, subtitle, spacing} = classes
   // Destructuring place
-  const {name, address, photo, price_level, ranking, phone, web_url, website} = place
+  const {name, address, photo, price_level, ranking, phone, web_url, website, num_reviews} = place
 
   return (
     <Card elevation={6}>
@@ -19,6 +19,12 @@ const PlaceDetails = ({place}) => {
       title={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" >{name ? name : "Restaurant near you"}</Typography>
+
+        <Box display='flex' justifyContent="space-between">
+        <Rating size="small" value={Number(place.rating)} readOnly />
+          <Typography gutterBottom variant="subtitle1" >out of {num_reviews} reviews</Typography>
+        </Box>
+
         <Box display='flex' justifyContent="space-between">
           <Typography variant="subtitle1" >Price</Typography>
           <Typography gutterBottom variant="subtitle1" >{price_level}</Typography>
