@@ -19,8 +19,10 @@ const App = () => {
   const [coordinates, setCoordinates] = useState({}) 
   const [bounds, setBounds] = useState({}) 
 
+  const [isLoading, setIsLoading] = useState(false)
+
   // Map and List state in App.js
-  const [childClick, setChildClick] = useState(null)
+  const [childClicked, setChildClicked] = useState(null)
 
   // destructuring
   const {sw, ne} = bounds
@@ -35,11 +37,16 @@ const App = () => {
 
   // useEffect
   useEffect(() => {
+    setIsLoading(true)
+
     getPlacesData(sw, ne)
-      .then(data => setPlaces(data))
-   }, [coordinates, sw, ne])
+    .then(data => {
+      setPlaces(data)
+      setIsLoading(false)
+    })
+    
 
-
+  }, [coordinates, sw, ne])
 
   return (
     <div>
@@ -47,11 +54,11 @@ const App = () => {
       <Header />
       <Grid container spacing={3} styles={{width: '100%'}} >
         <Grid item xs={12} md={4} >
-          <List places={places}  />
+          <List places={places} childClicked={childClicked} isLoading={isLoading} />
         </Grid>
         <Grid item xs={12} md={8} >
           <Map setCoordinates={setCoordinates}
-          setBounds={setBounds} coordinates={coordinates} places={places} />
+          setBounds={setBounds} coordinates={coordinates} places={places} setChildClicked={setChildClicked} />
         </Grid>
       </Grid>
 

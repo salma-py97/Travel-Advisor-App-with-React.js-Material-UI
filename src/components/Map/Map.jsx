@@ -6,7 +6,7 @@ import Rating from '@material-ui/lab/Rating'
 import useStyles from './styles'
 
 
-const Map = ({setCoordinates, setBounds, coordinates, places}) => {
+const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked }) => {
   // useStyles hook
   const classes = useStyles()
   // destructuring
@@ -39,7 +39,7 @@ const Map = ({setCoordinates, setBounds, coordinates, places}) => {
           setCoordinates({lat: e.center.lat, lng: e.center.lng})
           setBounds({ne : e.marginBounds.ne, sw: e.marginBounds.sw})
         }}
-        onChildClick={(child) => {}} 
+        onChildClick={(child) => setChildClicked(child)} 
       >
 
         {/* display the restaurants on the map */}

@@ -6,12 +6,15 @@ import Rating from '@material-ui/lab/Rating'
 
 import useStyles from './styles'
 
-const PlaceDetails = ({place}) => {
+const PlaceDetails = ({place, selected, refProp}) => {
   const classes = useStyles()
   // Destructuring classes
   const {chip, subtitle, spacing} = classes
   // Destructuring place
   const {name, address, photo, price_level, ranking, phone, web_url, website, num_reviews} = place
+
+  // 
+  if (selected) refProp?.current?.scrollIntoView({ behavior: "smooth", block: ""})
 
   return (
     <Card elevation={6}>
