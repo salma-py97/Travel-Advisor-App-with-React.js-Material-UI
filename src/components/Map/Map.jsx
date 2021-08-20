@@ -4,9 +4,10 @@ import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import Rating from '@material-ui/lab/Rating'
 
 import useStyles from './styles'
+import { mapStyles } from './mapStyles'
 
 
-const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked }) => {
+const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked, weatherData }) => {
   // useStyles hook
   const classes = useStyles()
   // destructuring
@@ -34,7 +35,8 @@ const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked })
         center={coordinates}
         defaultZoom={14}
         margin={[50,50,50,50]}
-        options={''}
+        options={{disableDefaultUI: true, zoomControl: true, styles: mapStyles}}
+        // snazzymaps.com to styles maps
         onChange={(e) => {
           setCoordinates({lat: e.center.lat, lng: e.center.lng})
           setBounds({ne : e.marginBounds.ne, sw: e.marginBounds.sw})
@@ -66,6 +68,12 @@ const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked })
           </div>
         ))}
 
+            {/* weather display */}
+        {weatherData?.list?.map((data, i) => (
+          <div key={i} lat={data.coord.lat} lng={data.coord.lon} >
+            <img height={100} src={`https://openweathermap.org/img/w/${data.weather[0].icon}.png`} alt="" />
+          </div>
+        ) )}
       </GoogleMapReact>
     </div>
   )

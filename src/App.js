@@ -9,6 +9,7 @@ import Map from './components/Map/Map';
 
 // Axios
 import { getPlacesData } from './api/index'
+import { getWeatherData } from './api/index'
 // useEffect
 import { useState, useEffect } from 'react';
 
@@ -16,6 +17,7 @@ import { useState, useEffect } from 'react';
 const App = () => {
   // State
   const [places, setPlaces] = useState([]) 
+  const [weatherData, setWeatherData] = useState([]) 
   const [filteredPlaces, setFilteredPlaces] = useState([])
   const [coordinates, setCoordinates] = useState({}) 
   const [bounds, setBounds] = useState({}) 
@@ -45,11 +47,17 @@ const App = () => {
     if (bounds.sw && bounds.ne) {
       setIsLoading(true)
   
+      // weather
+      getWeatherData(coordinates.lat, coordinates.lng)
+        .then(
+          data => setWeatherData(data)
+        )
+      // places
       getPlacesData(type, sw, ne)
-      .then(data => {
-        setPlaces(data?.filter((place) => place.name && place.num_reviews > 0))
-        setFilteredPlaces([])
-        setIsLoading(false)
+        .then(data => {
+          setPlaces(data?.filter((place) => place.name && place.num_reviews > 0))
+          setFilteredPlaces([])
+          setIsLoading(false)
       })
     }
   }, [type, sw, ne])
@@ -73,7 +81,7 @@ const App = () => {
         </Grid>
         <Grid item xs={12} md={8} >
           <Map setCoordinates={setCoordinates}
-          setBounds={setBounds} coordinates={coordinates} places={filteredPlaces.length ? filteredPlaces : places} setChildClicked={setChildClicked} />
+          setBounds={setBounds} coordinates={coordinates} places={filteredPlaces.length ? filteredPlaces : places} setChildClicked={setChildClicked} weatherData={weatherData} />
         </Grid>
       </Grid>
 
