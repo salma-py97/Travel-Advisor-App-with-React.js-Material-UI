@@ -16,11 +16,13 @@ import { useState, useEffect } from 'react';
 const App = () => {
   // State
   const [places, setPlaces] = useState([]) 
+  const [filteredPlaces, setFilteredPlaces] = useState([])
   const [coordinates, setCoordinates] = useState({}) 
   const [bounds, setBounds] = useState({}) 
 
   const [isLoading, setIsLoading] = useState(false)
 
+  // List state
 	const [type, setType] = useState("restaurants")
 	const [rating, setRating] = useState("")
 
@@ -38,30 +40,40 @@ const App = () => {
     })
   } , [])
 
-  // useEffect
+  // useEffect to fetch data
   useEffect(() => {
-    setIsLoading(true)
+    if (bounds.sw && bounds.ne) {
+      setIsLoading(true)
+  
+      getPlacesData(type, sw, ne)
+      .then(data => {
+        setPlaces(data?.filter((place) => place.name && place.num_reviews > 0))
+        setFilteredPlaces([])
+        setIsLoading(false)
+      })
+    }
+  }, [type, sw, ne])
 
-    getPlacesData(type, sw, ne)
-    .then(data => {
-      setPlaces(data)
-      setIsLoading(false)
-    })
-    
+  console.log({places})
+  console.log({filteredPlaces})
 
-  }, [type, coordinates, sw, ne])
+  // useEffect for rating
+  useEffect(() => {
+    const filteredPlaces = places.filter((place) => place.rating > rating)
+    setFilteredPlaces(filteredPlaces)
+  }, [rating])
 
   return (
     <div>
       <CssBaseline />
-      <Header />
+      <Header setCoordinates={setCoordinates} />
       <Grid container spacing={3} styles={{width: '100%'}} >
         <Grid item xs={12} md={4} >
-          <List places={places} childClicked={childClicked} isLoading={isLoading} type={type} setType={setType} rating={rating} setRating={setRating} />
+          <List places={filteredPlaces.length ? filteredPlaces : places} childClicked={childClicked} isLoading={isLoading} type={type} setType={setType} rating={rating} setRating={setRating} />
         </Grid>
         <Grid item xs={12} md={8} >
           <Map setCoordinates={setCoordinates}
-          setBounds={setBounds} coordinates={coordinates} places={places} setChildClicked={setChildClicked} />
+          setBounds={setBounds} coordinates={coordinates} places={filteredPlaces.length ? filteredPlaces : places} setChildClicked={setChildClicked} />
         </Grid>
       </Grid>
 
