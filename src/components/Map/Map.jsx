@@ -30,7 +30,7 @@ const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked, w
       click create credentials
       click API Key */}
       <GoogleMapReact 
-        bootstrapURLKeys={{ key: 'AIzaSyC_3Kd3aOAKJBO6PCdUQMSThVQdsWEhdOw' }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY}}
         defaultCenter={coordinates}
         center={coordinates}
         defaultZoom={14}
