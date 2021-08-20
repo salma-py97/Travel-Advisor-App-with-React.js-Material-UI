@@ -13,7 +13,7 @@ const PlaceDetails = ({place, selected, refProp}) => {
   // Destructuring place
   const {name, address, photo, price_level, ranking, phone, web_url, website, num_reviews} = place
 
-  // 
+  // when clicked scroll to place smoothly
   if (selected) refProp?.current?.scrollIntoView({ behavior: "smooth", block: ""})
 
   return (
